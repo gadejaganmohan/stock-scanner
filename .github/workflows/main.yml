@@ -23,5 +23,7 @@ jobs:
           pip install pandas requests
 
       - name: Run script
-        run: |
-          python scanner.py
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: python scanner.py
