@@ -1,0 +1,26 @@
+name: Daily Stock Scanner
+
+on:
+  schedule:
+    - cron: '15 3 * * *'   # 8:45 AM IST
+  workflow_dispatch:
+
+jobs:
+  run-scanner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas requests
+
+      - name: Run script
+        run: python scanner.py
