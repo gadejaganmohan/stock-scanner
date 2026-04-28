@@ -4,9 +4,11 @@ import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 
-# 🔔 TELEGRAM CONFIG
-BOT_TOKEN = "8598266278:AAGCWSCtq66ckhMs1IHTbBLpWjLHmcrpkbM"
-CHAT_ID = "992021107"
+#TELEGRAM CONFIG
+import os
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
@@ -16,7 +18,7 @@ def send_telegram(message):
     }
     requests.post(url, data=data)
 
-# 📁 LOAD STOCKS
+#  LOAD STOCKS
 df = pd.read_csv("stocks.csv")
 stocks = df[["SYMBOL", "NAME OF COMPANY"]].dropna()
 
@@ -30,13 +32,13 @@ strong_positive = [
     "approval", "launch", "capacity"
 ]
 
-# ❌ NEGATIVE SIGNALS
+#  NEGATIVE SIGNALS
 negative_keywords = [
     "loss", "decline", "fraud", "penalty",
     "downgrade", "fall", "drop", "weak"
 ]
 
-# ❌ NOISE / NON-TRADEABLE
+#  NOISE / NON-TRADEABLE
 noise_keywords = [
     "?", "analysis", "survey",
     "shareholding", "disclosure", "open interest",
@@ -44,7 +46,7 @@ noise_keywords = [
     "headquarter", "shift"
 ]
 
-# 📰 FETCH NEWS (RSS)
+#  FETCH NEWS (RSS)
 def fetch_news(query):
     query_encoded = urllib.parse.quote(query)
     url = f"https://news.google.com/rss/search?q={query_encoded}+India&hl=en-IN&gl=IN&ceid=IN:en"
@@ -64,20 +66,20 @@ def fetch_news(query):
         print(f"RSS Error: {e}")
         return []
 
-# 🧠 FINAL FILTER (STRICT + CLEAN)
+#  FINAL FILTER (STRICT + CLEAN)
 def is_positive(headlines):
 
-    # 🚫 Reject if any noise
+    # Reject if any noise
     for h in headlines:
         if any(n in h for n in noise_keywords):
             return False
 
-    # 🚫 Reject if negative
+    #  Reject if negative
     for h in headlines:
         if any(n in h for n in negative_keywords):
             return False
 
-    # ✅ Accept if strong trigger exists
+    # Accept if strong trigger exists
     for h in headlines:
         clean_h = h.replace(",", "").replace("%", "").lower()
 
@@ -86,10 +88,10 @@ def is_positive(headlines):
 
     return False
 
-# 🔄 SCAN
+#  SCAN
 results = []
 
-print("🔍 Scanning stocks...\n")
+print(" Scanning stocks...\n")
 
 for i, (_, row) in enumerate(stocks.iterrows()):
     symbol = row["SYMBOL"]
