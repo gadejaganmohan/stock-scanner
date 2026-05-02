@@ -94,8 +94,8 @@ results = []
 print(" Scanning stocks...\n")
 
 for i, (_, row) in enumerate(stocks.iterrows()):
-    symbol = row["Company Name"]
-    name = row["Symbol"]
+    symbol = row["Symbol"]
+    name = row["Company Name"]
 
     print(f"{i+1}/{len(stocks)}: {symbol}")
 
