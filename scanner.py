@@ -12,12 +12,18 @@ CHAT_ID = os.getenv("CHAT_ID")
 
 def send_telegram(message):
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
-    data = {
-        "chat_id": CHAT_ID,
-        "text": message
-    }
-    requests.post(url, data=data)
 
+    max_length = 3500  # safe chunk size
+
+    for i in range(0, len(message), max_length):
+        chunk = message[i:i + max_length]
+
+        response = requests.post(url, data={
+            "chat_id": CHAT_ID,
+            "text": chunk
+        })
+
+        print("Telegram response:", response.text)
 #  LOAD STOCKS
 df = pd.read_csv("test_scan.csv")
 stocks = df[["Company Name","Symbol"]].dropna()
