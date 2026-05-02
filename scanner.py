@@ -19,7 +19,7 @@ def send_telegram(message):
     requests.post(url, data=data)
 
 #  LOAD STOCKS
-df = pd.read_csv("ind_nifty100list.csv")
+df = pd.read_csv("test_scan.csv")
 stocks = df[["Company Name","Symbol"]].dropna()
 
 # 🔍 STRONG POSITIVE KEYWORDS
