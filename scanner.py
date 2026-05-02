@@ -20,7 +20,7 @@ def send_telegram(message):
 
 #  LOAD STOCKS
 df = pd.read_csv("ind_nifty100list.csv")
-stocks = df[["SYMBOL", "NAME OF COMPANY"]].dropna()
+stocks = df[["Symbol", "Company Name"]].dropna()
 
 # 🔍 STRONG POSITIVE KEYWORDS
 strong_positive = [
